@@ -1,0 +1,37 @@
+[
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c src/acpi.c -o src/acpi.o",
+    "file": "src/acpi.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c src/kmain.c -o src/kmain.o",
+    "file": "src/kmain.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c src/log.c -o src/log.o",
+    "file": "src/log.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c src/string.c -o src/string.o",
+    "file": "src/string.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c src/terminal.c -o src/terminal.o",
+    "file": "src/terminal.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c flanterm/flanterm.c -o flanterm/flanterm.o",
+    "file": "flanterm/flanterm.o"
+  },
+  {
+    "directory": ".",
+    "command": "aarch64-linux-gnu-gcc -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -c flanterm/backends/fb.c -o flanterm/backends/fb.o",
+    "file": "flanterm/backends/fb.o"
+  }
+]

@@ -16,6 +16,6 @@ struct rspd_t {
     uint8_t reserved[3];
 } __attribute__ ((packed));
 
-struct rspd_t* init_rspd(uint64_t rspd_addr);
+struct rspd_t* init_rsdp(void* rsdp_addr);
 
 #endif

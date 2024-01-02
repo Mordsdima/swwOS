@@ -3,6 +3,8 @@
         "GitHub Copilot": "javascript",
         "*.jinja2": "html",
         "fb.h": "c",
-        "terminal.h": "c"
+        "terminal.h": "c",
+        "utils.h": "c",
+        "liminereqs.h": "c"
     }
 }

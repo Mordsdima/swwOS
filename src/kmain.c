@@ -6,40 +6,10 @@
 #include <log.h>
 #include <acpi.h>
 #include <utils.h>
+#include <liminereqs.h>
 
 extern uint64_t _exception_vector;
-static void kmain(void);
 
-LIMINE_BASE_REVISION(1)
-
-struct limine_entry_point_request entry_point_request = {
-    .id = LIMINE_ENTRY_POINT_REQUEST,
-    .revision = 0, .response = NULL,
-
-    .entry = kmain
-};
-
-struct limine_framebuffer_request framebuffer_request = {
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_memmap_request memmap_request = {
-    .id = LIMINE_MEMMAP_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_bootloader_info_request bootloader_info = {
-    .id = LIMINE_BOOTLOADER_INFO_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_stack_size_request _stack = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = 0, .response = NULL,
-
-    .stack_size = 128*1024 // 128 kb
-};
 
 void process_memory(struct limine_memmap_entry* e) {
     switch(e->type) {
@@ -53,8 +23,7 @@ void process_memory(struct limine_memmap_entry* e) {
             log_info("Found a memory block - Reserved");
             break;
         case LIMINE_MEMMAP_ACPI_RECLAIMABLE:
-            log_info("Found a memory block - ACPI. Parsing RSPD...");
-            init_rspd(e->base);
+            log_info("Found a memory block - ACPI Reclaimable.");
             break;
     }
 }
@@ -85,13 +54,16 @@ static void kmain() {
 
     set_vbar_el1(&_exception_vector);
 
-    struct limine_memmap_response *memmap_response = memmap_request.response;
+    /*struct limine_memmap_response *memmap_response = memmap_request.response;
     for (size_t i = 0; i < memmap_response->entry_count; i++) {
         struct limine_memmap_entry *e = memmap_response->entries[i];
         process_memory(e);
-    }
+    }*/
+    init_rsdp(_rsdp.response->address);
 
-    log_info("OK");
+    log_info("uwu");
+
+    //log_info("kernel ");
 
     for (;;);
 }

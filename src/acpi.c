@@ -1,17 +1,21 @@
 #include <acpi.h>
 #include <terminal.h>
+#include <log.h>
+#include <panic.h>
 
-#define RPSD_SIGNATURE "RSD PTR "
+struct rspd_t* rsdp_header;
 
-struct rspd_t* rpsd_header;
-
-struct rspd_t* init_rspd(uint64_t rpsd_addr) {
+struct rspd_t* init_rsdp(void* rsdp_addr) {
     // TODO: Checksum check
-    struct rspd_t *rpsd_hdr;
-    rpsd_hdr = (struct rspd_t*)&rpsd_addr;
-    if((char*)(*rpsd_hdr).signature == (char*)RPSD_SIGNATURE) {
-        tprintf("good\n");
+    struct rspd_t *rsdp_hdr;
+    rsdp_hdr = rsdp_addr;
+    //tprintf((char*)(*rsdp_hdr).signature);
+    if(rsdp_hdr->revision >= 2) {
+        log_info("ACPI Found 2.0");
+    } else {
+        log_info("ACPI Found 1.0");
+        panic("ACPI found 1.0 while we need 2.0 as minimum!");
     }
-    //tprintf("%x\n",(char*)(*rpsd_hdr).signature); // внимание казахстан умирает
-    return rpsd_hdr;
+    tprintf("%x\n",rsdp_hdr->checksum); // внимание казахстан умирает
+    return rsdp_hdr;
 }
