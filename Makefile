@@ -1,6 +1,5 @@
 OBJECTS := $(patsubst src/%.c,out/%.o,$(shell find src -name "*.c"))
 OBJECTS += $(patsubst src/%.s,out/%.o,$(shell find src -name "*.s"))
-OBJECTS += $(patsubst flanterm/%.c,out/flanterm/%.o,$(shell find flanterm -name "*.c"))
 CCFLAGS := -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror
 
 KERNEL := swk.elf
