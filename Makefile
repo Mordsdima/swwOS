@@ -1,15 +1,19 @@
-OBJECTS = $(patsubst %.c,%.o,$(shell find src -name "*.c"))
-CCARGS = -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror
+OBJECTS := $(patsubst src/%.c,out/%.o,$(shell find src -name "*.c"))
+OBJECTS += $(patsubst src/%.s,out/%.o,$(shell find src -name "*.s"))
+CCFLAGS := -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror
 
-KERNEL := swk.efi
+KERNEL := swk.elf
 
-%.o: %.c
-	aarch64-linux-gnu-gcc $(CCARGS) -c $< -o $@
+out/%.o: src/%.c
+	aarch64-linux-gnu-gcc $(CCFLAGS) -c $< -o $@
 
-%.o: %.s
+out/%.o: src/%.s
 	aarch64-linux-gnu-as $< -o $@
 
-$(KERNEL): $(OBJECTS) flanterm/flanterm.o flanterm/backends/fb.o src/interrupts.o
+out/flanterm/%.o: flanterm/%.c
+	aarch64-linux-gnu-gcc $(CCFLAGS) -c $< -o $@
+
+$(KERNEL): $(OBJECTS)
 	aarch64-linux-gnu-ld -nostdlib -Tsrc/link.ld --no-warn-rwx-segments $^ -o $@
 
 run: $(KERNEL)
