@@ -9,13 +9,22 @@ CCARGS = -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic
 %.o: %.s
 	aarch64-linux-gnu-as $< -o $@
 
-k.elf: $(OBJECTS) $(LIBFDT_OBJS) flanterm/flanterm.o flanterm/backends/fb.o src/interrupts.o
+k.elf: $(OBJECTS) flanterm/flanterm.o flanterm/backends/fb.o src/interrupts.o
 	aarch64-linux-gnu-ld -nostdlib -Tsrc/link.ld --no-warn-rwx-segments $? -o swk.elf
 
 run:
 	-mv swk.elf ./vfs/
 	./run.sh
 
-.PHONY: k.elf
+clean_objects:
+	rm -rf ./**/*.o
+
+clean: clean_objects
+	-rm -rf ./vfs/swk.elf
+	-rm -rf swk.elf
+
+build: k.elf clean_objects
+
+.PHONY: build
 
 

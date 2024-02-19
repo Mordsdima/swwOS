@@ -1,0 +1,1 @@
+curl https://retrage.github.io/edk2-nightly/bin/RELEASEAARCH64_QEMU_EFI.fd --output ovmf.fd
