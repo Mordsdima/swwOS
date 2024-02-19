@@ -1,7 +1,7 @@
 OBJECTS = $(patsubst %.c,%.o,$(shell find src -name "*.c"))
 CCARGS = -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror
 
-#OBJECTS := $(OBJECTS:.s=.o)
+KERNEL := swk.efi
 
 %.o: %.c
 	aarch64-linux-gnu-gcc $(CCARGS) -c $< -o $@
@@ -9,21 +9,17 @@ CCARGS = -ffreestanding -Iinclude -Iflanterm -std=gnu11 -Wall -Wextra -Wpedantic
 %.o: %.s
 	aarch64-linux-gnu-as $< -o $@
 
-k.elf: $(OBJECTS) flanterm/flanterm.o flanterm/backends/fb.o src/interrupts.o
-	aarch64-linux-gnu-ld -nostdlib -Tsrc/link.ld --no-warn-rwx-segments $? -o swk.elf
+$(KERNEL): $(OBJECTS) flanterm/flanterm.o flanterm/backends/fb.o src/interrupts.o
+	aarch64-linux-gnu-ld -nostdlib -Tsrc/link.ld --no-warn-rwx-segments $^ -o $@
 
-run:
-	-mv swk.elf ./vfs/
+run: $(KERNEL)
+	-mv $< ./vfs/
 	./run.sh
 
-clean_objects:
-	rm -rf ./**/*.o
+clean:
+	-rm -rf $(OBJECTS) ./vfs/$(KERNEL) $(KERNEL)
 
-clean: clean_objects
-	-rm -rf ./vfs/swk.elf
-	-rm -rf swk.elf
-
-build: k.elf clean_objects
+build: $(KERNEL)
 
 .PHONY: build
 
