@@ -8,6 +8,7 @@
 #include <limine.h>
 #include <pmm.h>
 #include <vfs.h>
+#include <liballoc.h>
 
 extern uint64_t _exception_vector;
 
@@ -40,7 +41,8 @@ struct limine_stack_size_request _stack = {
 };
 
 void kfault() {
-    panic("Fault!");
+    asm volatile("wfe");
+    for(;;);
 }
 
 static void kmain() {
@@ -64,7 +66,16 @@ static void kmain() {
     set_vbar_el1(&_exception_vector); // Init interrupts
     init_pmm(); // Init PMM
     vfs_init(); // Init VFS
+    
+    
 
+    uint64_t* a = (uint64_t*)kmalloc(0x1000);
+    tprintf("%x", a);
+    *a = 1;
+
+    //uint64_t* a = (uint64_t*)kmalloc_pages(1);
+
+    //tprintf("%x", a);
 
     log_info("uwu");
 
