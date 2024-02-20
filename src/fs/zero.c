@@ -6,12 +6,12 @@
 #include <terminal.h>
 
 long zero_read(vfs_node_t* node, char* path, size_t off, size_t len, uint8_t* buf) {
-    tprintf("zero read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x", off, len, buf, path, node->id);
+    tprintf("zero read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id\n: %x", off, len, buf, path, node->id);
     return 0;
 }
 
 long zero_write(vfs_node_t* node, char* path, size_t off, size_t len, uint8_t* buf) {
-    tprintf("zero write: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x", off, len, buf, path, node->id);
+    tprintf("zero write: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id\n: %x", off, len, buf, path, node->id);
     return len;
 }
 

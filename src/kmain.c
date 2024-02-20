@@ -81,8 +81,17 @@ static void kmain() {
 
     struct limine_file *initrd = _modules.response->modules[0];
 
-    tprintf("%x\n", vfs_mount(init_tar(initrd->address)));
-    tprintf("%x\n", vfs_getsize("0:/hi"));
+    int initrd_mount_result = vfs_mount(init_tar(initrd->address));
+    if(initrd_mount_result < 0) {
+        panic("Oh no! Failed to mount filesystem: %x", initrd_mount_result);
+    }
+    long size = vfs_getsize("0:/hi");
+    uint8_t* buf = kmalloc(size);//
+
+    vfs_read("0:/hi", 0, size, buf);
+    
+    print((char*)buf, size);
+    tprintf("%s\n", *buf);
 
     log_info("uwu");
 

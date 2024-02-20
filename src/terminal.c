@@ -44,11 +44,7 @@ int print(const char* string, size_t len) {
 	return 1;
 }
 
-int tprintf(const char* restrict format, ...) {
-    //print(string, strlen(string));
-    va_list parameters;
-	va_start(parameters, format);
-
+int tvsprintf(const char* restrict format, va_list parameters) {
 	int written = 0;
 
 	while (*format != '\0') {
@@ -115,10 +111,21 @@ int tprintf(const char* restrict format, ...) {
 		}
 	}
 
+	return written;
+}
+
+int tprintf(const char* restrict format, ...) {
+    //print(string, strlen(string));
+    va_list parameters;
+	va_start(parameters, format);
+
+	int written = tvsprintf(format, parameters);
+
 	va_end(parameters);
 	return written;
 }
 
 void clear() {
+	ft_ctx->set_cursor_pos(ft_ctx, 0, 0);
 	ft_ctx->clear(ft_ctx, false);
 }

@@ -86,7 +86,7 @@ long vfs_read(char* path, size_t offset, size_t len, uint8_t* buf) {
 
     if(current_node == NULL) 
         return -ENXIO;
-    if(!current_node->write)
+    if(!current_node->read)
         return -EINVAL; // what fucking device dont have a read/write?
 
     return current_node->read(current_node, strchr(path, ':'), offset, len, buf);

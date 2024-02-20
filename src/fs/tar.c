@@ -15,15 +15,14 @@ int oct2bin(unsigned char *str, int size) {
     return n;
 }
 
-int tar_lookup(uint8_t* archive, char *filename, size_t offset, size_t length, uint8_t **out) {
+int tar_lookup(uint8_t* archive, char *filename, size_t offset, size_t length, uint8_t *out) {
     unsigned char *ptr = archive;
- 
     while (!memcmp(ptr + 257, "ustar", 5)) {
-        int filesize = oct2bin(ptr + 0x7c, 11);
-        if (!memcmp(ptr, filename, strlen(filename) + 1)) {
+        tar_header_t* hdr = (tar_header_t*)ptr;
+        int filesize = oct2bin((uint8_t*)hdr->size, 11);
+        if (!memcmp(ptr, filename, strlen(filename) + 1) && (hdr->type == '0' || hdr->type == '\0')) {
             if(out)
                 memcpy(out, ptr + 512 + offset, length);
-                //*out = ptr + 512 + offset;
             return filesize; 
         }
         ptr += (((filesize + 511) / 512) + 1) * 512;
@@ -32,12 +31,12 @@ int tar_lookup(uint8_t* archive, char *filename, size_t offset, size_t length, u
 }
 
 long tar_read(vfs_node_t* node, char* path, size_t off, size_t len, uint8_t* buf) {
-    tprintf("tar read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x", off, len, buf, path, node->id);
+    tprintf("tar read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x\n", off, len, buf, path, node->id);
     tar_archive_t* archive = node->device;
     char* cpath = path;
     cpath++;
 
-    return tar_lookup(archive->ptr, cpath, off, len, NULL);
+    return tar_lookup(archive->ptr, cpath, off, len, buf);
 }
 
 long tar_getsize(vfs_node_t* node, char* path) {
