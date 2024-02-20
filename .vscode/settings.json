@@ -5,6 +5,8 @@
         "fb.h": "c",
         "terminal.h": "c",
         "utils.h": "c",
-        "liminereqs.h": "c"
+        "liminereqs.h": "c",
+        "liballoc.h": "c",
+        "typeinfo": "c"
     }
 }

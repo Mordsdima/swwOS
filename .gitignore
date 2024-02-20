@@ -2,5 +2,6 @@ flanterm/*.o
 
 *.o
 *.ko
+*.tar
 vfs/swk.elf
 ovmf.fd

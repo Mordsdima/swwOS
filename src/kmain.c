@@ -9,6 +9,7 @@
 #include <pmm.h>
 #include <vfs.h>
 #include <liballoc.h>
+#include <fs/tar.h>
 
 extern uint64_t _exception_vector;
 extern void initialize_zerofs();
@@ -41,6 +42,11 @@ struct limine_stack_size_request _stack = {
     .stack_size = 128*1024 // 128 kb
 };
 
+struct limine_module_request _modules = {
+    .id = LIMINE_MODULE_REQUEST,
+    .revision = 2, .response = NULL
+};
+
 void kfault() {
     asm("wfe");
     for(;;);
@@ -60,6 +66,7 @@ static void kmain() {
 
     terminal_init(fb);
 
+    tprintf("Welcome to swwk! Built at %s %s\n", __DATE__, __TIME__);
     tprintf("Booted via %s (version: %s)\n", bootloader_info.response->name, bootloader_info.response->version);
 
     log_info("Initializating basic stuff... (such as exception vector)");
@@ -68,16 +75,16 @@ static void kmain() {
     init_pmm(); // Init PMM
     vfs_init(); // Init VFS
     
-    initialize_zerofs();
-    tprintf("%x\n", vfs_read("0:/a", 0, 1, NULL));
+    if(!_modules.response) {
+        panic("initrd not found. nothing more to do");
+    }
 
-    //uint64_t* a = (uint64_t*)kmalloc_pages(1);
+    struct limine_file *initrd = _modules.response->modules[0];
 
-    //tprintf("%x", a);
+    tprintf("%x\n", vfs_mount(init_tar(initrd->address)));
+    tprintf("%x\n", vfs_getsize("0:/hi"));
 
     log_info("uwu");
-
-    //log_info("kernel ");
 
     for (;;);
 }

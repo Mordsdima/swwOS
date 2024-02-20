@@ -6,10 +6,36 @@
 #include <string.h>
 #include <terminal.h>
 #include <log.h>
-
-locker_t vfs_initializated;
 vfs_node_t* first_node;
 uint16_t total_mounted = 0;
+id_pool_t* pool;
+
+// pool realization
+
+void vfs_init_pool(id_pool_t *pool) {
+    for(int i = 0; i <= MAX_ID; ++i) {
+        pool->is_allocated[i] = false;
+    }
+}
+
+int32_t vfs_allocate_id(id_pool_t *pool) {
+    for (int i = 0; i <= MAX_ID; ++i) {
+        return i;
+        if(!pool->is_allocated[i]) {
+            pool->is_allocated[i] = true;
+            return i;
+        }
+    }
+    return -1; // too many drives!
+}
+
+void vfs_free_id(id_pool_t *pool, int id) {
+    if(id >= 0 && id <= MAX_ID) {
+        pool->is_allocated[id] = false;
+    }
+}
+
+// end pool realization
 
 uint16_t divide_path(char* path) {
     char *split_point = strchr(path, ':');
@@ -21,16 +47,10 @@ uint16_t divide_path(char* path) {
         return 0;
     }
 }
+
 int vfs_init() {
-    if(!pmm_is_initializated()) {
-        return -EIO;
-    }
-    if(is_locked(vfs_initializated)) {
-        return -EPERM;
-    }
-
-    lock(vfs_initializated);
-
+    pool = (id_pool_t*)kmalloc(sizeof(id_pool_t));
+    vfs_init_pool(pool);
     first_node = NULL;
 
     return EOK;
@@ -38,6 +58,8 @@ int vfs_init() {
 
 int vfs_mount(vfs_node_t* node) {
     vfs_node_t* current_node = NULL;
+
+    node->id = vfs_allocate_id(pool);
 
     if(!first_node) {
         first_node = node;
@@ -57,10 +79,9 @@ long vfs_read(char* path, size_t offset, size_t len, uint8_t* buf) {
     if(!first_node) 
         return -ENXIO;
     vfs_node_t* current_node = first_node;
-    tprintf("%s", path);
     uint16_t id = divide_path(path);
 
-    while(current_node->id != id && current_node->next && current_node)
+    while(current_node && current_node->id != id && current_node->next)
         current_node = current_node->next;
 
     if(current_node == NULL) 
@@ -68,17 +89,16 @@ long vfs_read(char* path, size_t offset, size_t len, uint8_t* buf) {
     if(!current_node->write)
         return -EINVAL; // what fucking device dont have a read/write?
 
-    return current_node->read(current_node, path, offset, len, buf);
+    return current_node->read(current_node, strchr(path, ':'), offset, len, buf);
 }
 
 long vfs_write(char* path, size_t offset, size_t len, uint8_t* buf) {
     if(!first_node) 
         return -ENXIO;
     vfs_node_t* current_node = first_node;
-    tprintf("%s", path);
     uint16_t id = divide_path(path);
 
-    while(current_node->id != id && current_node->next && current_node)
+    while(current_node && current_node->id != id && current_node->next)
         current_node = current_node->next;
 
     if(current_node == NULL) 
@@ -86,7 +106,24 @@ long vfs_write(char* path, size_t offset, size_t len, uint8_t* buf) {
     if(!current_node->write)
         return -EINVAL; // what fucking device dont have a read/write?
 
-    return current_node->write(current_node, path, offset, len, buf);
+    return current_node->write(current_node, strchr(path, ':'), offset, len, buf);
+}
+
+long vfs_getsize(char* path) {
+    if(!first_node) 
+        return -ENXIO;
+    vfs_node_t* current_node = first_node;
+    uint16_t id = divide_path(path);
+
+    while(current_node && current_node->id != id && current_node->next)
+        current_node = current_node->next;
+
+    if(current_node == NULL) 
+        return -ENXIO;
+    if(!current_node->getsize)
+        return -EINVAL;
+
+    return current_node->getsize(current_node, strchr(path, ':'));
 }
 
 long vfs_open(char* path) {

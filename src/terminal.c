@@ -36,8 +36,6 @@ int terminal_init(struct limine_framebuffer *fb) {
         fb->pitch
     );
 
-    flanterm_write(ft_ctx, "init framebuffer: ok\n", 21);
-
     return 0;
 }
 

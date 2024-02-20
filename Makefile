@@ -3,7 +3,7 @@ OBJECTS += $(patsubst src/%.s,out/%.o,$(shell find src -name "*.s"))
 
 MODULES := $(patsubst modules/%.c,out/modules/%.ko,$(shell find modules -name "*.c"))
 
-CCFLAGS := -ffreestanding -Iinclude -Isrc/flanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror
+CCFLAGS := -ffreestanding -Iinclude -Isrc/flanterm -std=gnu11 -Wall -Wextra -Wpedantic -Werror -O0
 
 KERNEL := swk.elf
 
@@ -26,9 +26,13 @@ run: $(KERNEL)
 clean:
 	-rm -rf $(OBJECTS) ./vfs/$(KERNEL) $(KERNEL)
 
+initrd:
+	cd initrd && tar -cvf ../vfs/initrd.tar * && cd ..
+
 build: $(KERNEL) 
 modules: $(MODULES)
 
-.PHONY: build modules
+
+.PHONY: build modules initrd
 
 
