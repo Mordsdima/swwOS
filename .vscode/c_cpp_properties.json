@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/flanterm"
+                "${workspaceFolder}/src/flanterm"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

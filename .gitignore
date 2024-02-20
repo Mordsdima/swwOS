@@ -1,5 +1,6 @@
 flanterm/*.o
 
 *.o
+*.ko
 vfs/swk.elf
 ovmf.fd

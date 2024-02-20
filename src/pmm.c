@@ -5,7 +5,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-
 #define MAP_TO_HHDM(addr) (hhdm_request.response->offset + (uint64_t)(addr))
 
 struct limine_memmap_request memmap_request = {

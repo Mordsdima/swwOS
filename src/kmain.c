@@ -11,6 +11,7 @@
 #include <liballoc.h>
 
 extern uint64_t _exception_vector;
+extern void initialize_zerofs();
 
 LIMINE_BASE_REVISION(1)
 
@@ -41,7 +42,7 @@ struct limine_stack_size_request _stack = {
 };
 
 void kfault() {
-    asm volatile("wfe");
+    asm("wfe");
     for(;;);
 }
 
@@ -67,11 +68,8 @@ static void kmain() {
     init_pmm(); // Init PMM
     vfs_init(); // Init VFS
     
-    
-
-    uint64_t* a = (uint64_t*)kmalloc(0x1000);
-    tprintf("%x", a);
-    *a = 1;
+    initialize_zerofs();
+    tprintf("%x\n", vfs_read("0:/a", 0, 1, NULL));
 
     //uint64_t* a = (uint64_t*)kmalloc_pages(1);
 

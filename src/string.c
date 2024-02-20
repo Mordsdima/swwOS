@@ -51,3 +51,84 @@ int memcmp(const void *s1, const void *s2, size_t n) {
  
     return 0;
 }
+
+const char* strchr(const char* str, int ch) {
+    while (*str != '\0' && *str != ch)
+        str++;
+
+    if (*str == ch)
+        return str + 1;  // return pointer to the character after the found character
+    else
+        return NULL;
+}
+
+char * strcpy(char *dst, const char *src)
+{
+    while (*src != '\0')
+    {
+        *dst = *src;
+        dst++;
+        src++;
+    }
+    
+    *dst = '\0';
+
+    return dst;
+}
+
+long int strtol(const char* str, char** endptr, int base) {
+    long int result = 0;
+    int sign = 1;
+
+    // Пропустить начальные пробелы
+    while (*str == ' ')
+        str++;
+
+    // Обработка знака
+    if (*str == '-') {
+        sign = -1;
+        str++;
+    } else if (*str == '+') {
+        str++;
+    }
+
+    // Определение основания системы счисления
+    if (base == 0) {
+        if (*str == '0') {
+            str++;
+            if (*str == 'x' || *str == 'X') {
+                base = 16;
+                str++;
+            } else {
+                base = 8;
+            }
+        } else {
+            base = 10;
+        }
+    }
+
+    // Преобразование строки в число
+    while (*str != '\0') {
+        int digit;
+        if (*str >= '0' && *str <= '9') {
+            digit = *str - '0';
+        } else if (*str >= 'a' && *str <= 'f') {
+            digit = *str - 'a' + 10;
+        } else if (*str >= 'A' && *str <= 'F') {
+            digit = *str - 'A' + 10;
+        } else {
+            break;
+        }
+
+        if (digit >= base)
+            break;
+
+        result = result * base + digit;
+        str++;
+    }
+
+    if (endptr != NULL)
+        *endptr = (char*)str;
+
+    return result * sign;
+}
