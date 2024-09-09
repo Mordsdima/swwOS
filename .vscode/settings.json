@@ -9,5 +9,7 @@
         "liballoc.h": "c",
         "typeinfo": "c",
         "limine.h": "c"
-    }
+    },
+    "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
+    "mesonbuild.configureOnOpen": true
 }

@@ -1,0 +1,43 @@
+cflags = -ffreestanding -Iinclude -Isrc/flanterm -std=gnu11 -Wall -Wextra -Werror -O3
+ldflags = -nostdlib -Tsrc/link.ld --no-warn-rwx-segments
+
+cc = aarch64-linux-gnu-gcc
+ld = aarch64-linux-gnu-ld
+as = aarch64-linux-gnu-as
+
+rule cc 
+    command = $cc $cflags -c $in -o $out
+
+rule ld
+    command = $ld $ldflags $in -o $out
+
+rule as
+    command = $as $in -o $out
+
+# C
+
+build out/limine.o: cc src/bootstubs/limine.c
+build out/tar.o: cc src/fs/tar.c
+build out/zero.o: cc src/fs/zero.c
+build out/kmain.o: cc src/kmain.c
+build out/alloc.o: cc src/alloc.c
+build out/liballoc.o: cc src/liballoc.c
+build out/locker.o: cc src/locker.c
+build out/log.o: cc src/log.c
+build out/pmm.o: cc src/pmm.c
+build out/string.o: cc src/string.c
+build out/terminal.o: cc src/terminal.c
+build out/vfs.o: cc src/vfs.c
+build out/vmm.o: cc src/vmm.c
+build out/flanterm_fb.c: cc src/flanterm/backends/fb.o
+build out/flanterm.c: cc src/flanterm/flanterm.o
+
+build out/interrupts-aarch64.o: as src/interrupts.s
+
+build arm64.elf: ld $
+    out/limine.o out/tar.o out/zero.o $
+    out/kmain.o out/alloc.o out/liballoc.o $
+    out/locker.o out/log.o out/pmm.o $
+    out/string.o out/terminal.o out/vfs.o $
+    out/vmm.o out/interrupts-aarch64.o out/flanterm_fb.o $
+    out/flanterm.o
