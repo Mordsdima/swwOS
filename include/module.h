@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct {
     const char* name;
     int (*init)(void);

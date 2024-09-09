@@ -1,11 +1,11 @@
 //#include <errno.h> not needed now
-#include <limine.h>
 #include <limits.h>
 #include <flanterm.h>
 #include <backends/fb.h>
 #include <stddef.h>
 #include <stdarg.h>
 #include <utils.h>
+#include <bootstub.h>
 
 void int_to_hex(unsigned long value, char *buffer) {
     const char hex_chars[] = "0123456789abcdef";
@@ -28,7 +28,7 @@ void int_to_hex(unsigned long value, char *buffer) {
 
 struct flanterm_context *ft_ctx = NULL;
 
-int terminal_init(struct limine_framebuffer *fb) {
+int terminal_init(fb_info_t *fb) {
     ft_ctx = flanterm_fb_simple_init(
         fb->address,
         fb->width,

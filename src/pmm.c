@@ -4,32 +4,29 @@
 #include <limine.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <bootstub.h>
+#include <log.h>
 
-#define MAP_TO_HHDM(addr) (hhdm_request.response->offset + (uint64_t)(addr))
-
-struct limine_memmap_request memmap_request = {
-    .id = LIMINE_MEMMAP_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_hhdm_request hhdm_request = {
-    .id = LIMINE_HHDM_REQUEST,
-    .revision = 0, .response = NULL
-};
+#define MAP_TO_HHDM(addr) (hhdm_off + (uint64_t)(addr))
 
 locker_t pmm_locker;
 locker_t pmm_initializated;
 size_t memory_nodes;
 memory_node_t *memory_head, *memory_tail;
+uint64_t hhdm_off = 0;
 
-int init_pmm() {
+int init_pmm(bootstub_t* bs) {
     if(is_locked(pmm_locker) || is_locked(pmm_initializated)) 
         return -EPERM;
     lock(pmm_initializated);
     lock(pmm_locker);
 
-    for (size_t i = 0; i < memmap_request.response->entry_count; i++) {
-        struct limine_memmap_entry* entry = memmap_request.response->entries[i];
+    hhdm_off = bs->get_hhdm_off();
+
+    mmap_entries_t me = bs->get_mmap();
+
+    for (size_t i = 0; i < me.entry_count; i++) {
+        mmap_entry_t* entry = me.entries[i];
 
         if(entry->type != LIMINE_MEMMAP_USABLE) 
             continue;

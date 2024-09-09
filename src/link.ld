@@ -38,6 +38,10 @@ SECTIONS
 
     .data : {
         *(.data .data.*)
+        
+        KEEP(*(.requests_start_marker))
+        KEEP(*(.requests))
+        KEEP(*(.requests_end_marker))
     } :data
 
     /* Dynamic section for relocations, both in its own PHDR and inside data PHDR */

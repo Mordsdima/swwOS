@@ -31,7 +31,7 @@ int tar_lookup(uint8_t* archive, char *filename, size_t offset, size_t length, u
 }
 
 long tar_read(vfs_node_t* node, char* path, size_t off, size_t len, uint8_t* buf) {
-    tprintf("tar read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x\n", off, len, buf, path, node->id);
+    //tprintf("tar read: \noff: %x\nlen: %x\nbuf: %x\npath: %s\ndrive_id: %x\n", off, len, buf, path, node->id);
     tar_archive_t* archive = node->device;
     char* cpath = path;
     cpath++;

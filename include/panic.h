@@ -1,8 +1,7 @@
 #include <terminal.h>
 #include <stdarg.h>
 
-#ifndef _PANIC_H_
-#define _PANIC_H_
+#pragma once
 
 static inline void early_panic() {
     // 0xDEADBEEF
@@ -18,11 +17,10 @@ static inline void panic(const char* restrict format, ...) {
     va_list parameters;
 	va_start(parameters, format);
 
-    tprintf("swwk moment! (in other words panic). Here is reason:\n");
+    tprintf("A critical error has occurred (panic):\n");
 	tvsprintf(format, parameters);
 
 	va_end(parameters);
 
     early_panic();
 }
-#endif

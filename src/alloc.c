@@ -2,8 +2,8 @@
 #include <pmm.h>
 
 locker_t locker;
-extern struct limine_hhdm_request hhdm_request;
-#define MAP_TO_HHDM(addr) (hhdm_request.response->offset + (uint64_t)(addr))
+extern uint64_t hhdm_off;
+#define MAP_TO_HHDM(addr) (hhdm_off + (uint64_t)(addr))
 
 int liballoc_lock() {
     lock(locker);

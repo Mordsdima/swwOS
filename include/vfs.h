@@ -2,8 +2,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-#ifndef _VFS_H
-#define _VFS_H
+#pragma once
 
 #define MAX_ID 65535
 
@@ -37,5 +36,3 @@ long vfs_getsize(char* path);
 long vfs_open(char* path);
 long vfs_close(char* path);
 int vfs_mount(vfs_node_t* node);
-
-#endif

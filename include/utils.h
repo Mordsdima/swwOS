@@ -1,5 +1,4 @@
-#ifndef _UTILS_H_
-#define _UTILS_H_
+#pragma once
 
 #define WRITE_SYSREG(sysreg, val, type) \
     asm volatile ("msr        "#sysreg", %0\n" : : "r"((type)(val)))
@@ -23,6 +22,3 @@ static inline long strlen(const char* string) {
 
     return i;
 }
-
-
-#endif

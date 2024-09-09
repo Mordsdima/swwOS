@@ -1,5 +1,6 @@
-#ifndef _STRING_H
-#define _STRING_H
+#include <stddef.h>
+
+#pragma once
 
 char* strchr(const char* str, int ch);
 long int strtol(const char* str, char** endptr, int base);
@@ -19,4 +20,3 @@ static inline long strlen(const char* string) {
 
     return i;
 }
-#endif

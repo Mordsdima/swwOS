@@ -10,70 +10,55 @@
 #include <vfs.h>
 #include <liballoc.h>
 #include <fs/tar.h>
+#include <bootstub.h>
 
 extern uint64_t _exception_vector;
 extern void initialize_zerofs();
-
-LIMINE_BASE_REVISION(1)
-
-static void kmain(void);
-
-struct limine_entry_point_request entry_point_request = {
-    .id = LIMINE_ENTRY_POINT_REQUEST,
-    .revision = 0, .response = NULL,
-
-    .entry = kmain
-};
-
-struct limine_framebuffer_request framebuffer_request = {
-    .id = LIMINE_FRAMEBUFFER_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_bootloader_info_request bootloader_info = {
-    .id = LIMINE_BOOTLOADER_INFO_REQUEST,
-    .revision = 0, .response = NULL
-};
-
-struct limine_stack_size_request _stack = {
-    .id = LIMINE_STACK_SIZE_REQUEST,
-    .revision = 0, .response = NULL,
-
-    .stack_size = 128*1024 // 128 kb
-};
-
-struct limine_module_request _modules = {
-    .id = LIMINE_MODULE_REQUEST,
-    .revision = 2, .response = NULL
-};
 
 void kfault() {
     asm("wfe");
     for(;;);
 }
 
-static void kmain() {
-    if (LIMINE_BASE_REVISION_SUPPORTED == false) {
-        early_panic();
-    }
+void kmain(bootstub_t* bs) {
+    fb_info_t fb = bs->get_fb(0);
 
-    if (framebuffer_request.response == NULL
-     || framebuffer_request.response->framebuffer_count < 1) {
-        early_panic();
-    }
-
-    struct limine_framebuffer *fb = framebuffer_request.response->framebuffers[0];
-
-    terminal_init(fb);
+    terminal_init(&fb);
 
     tprintf("Welcome to swwk! Built at %s %s\n", __DATE__, __TIME__);
-    tprintf("Booted via %s (version: %s)\n", bootloader_info.response->name, bootloader_info.response->version);
 
     log_info("Initializating basic stuff... (such as exception vector)");
-
+    
     set_vbar_el1(&_exception_vector); // Init interrupts
-    init_pmm(); // Init PMM
+    
+    init_pmm(bs); // Init PMM
     vfs_init(); // Init VFS
+    
+
+    module_t module = bs->get_module();
+
+    if(module.addr == NULL) {
+        panic("no module (initrd) found so nothing to do");
+    }
+
+    int initrd_mount_result = vfs_mount(init_tar(module.addr));
+    if(initrd_mount_result < 0) {
+        panic("Oh no! Failed to mount filesystem: %x", initrd_mount_result);
+    }
+    long size = vfs_getsize(bs->get_cmdline());
+    uint8_t* buf = kmalloc(size);//
+
+    vfs_read(bs->get_cmdline(), 0, size, buf);
+    
+    print((char*)buf, size);
+    //tprintf("%s\n", *buf);
+
+    log_info("uwu");
+
+    /*
+    tprintf("Booted via %s (version: %s)\n", bootloader_info.response->name, bootloader_info.response->version);
+
+    
     
     if(!_modules.response) {
         panic("initrd not found. nothing more to do");
@@ -94,7 +79,7 @@ static void kmain() {
     tprintf("%s\n", *buf);
 
     log_info("uwu");
-
+*/
     for (;;);
 }
 

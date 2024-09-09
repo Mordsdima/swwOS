@@ -7,6 +7,7 @@
         "utils.h": "c",
         "liminereqs.h": "c",
         "liballoc.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "limine.h": "c"
     }
 }

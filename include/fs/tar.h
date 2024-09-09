@@ -1,8 +1,7 @@
 #include <stdint.h>
 #include <vfs.h>
 
-#ifndef _TAR_H
-#define _TAR_H
+#pragma once
 
 typedef struct {
     char filename[100];
@@ -28,5 +27,3 @@ typedef struct {
 } tar_archive_t;
 
 vfs_node_t* init_tar(uint8_t* ptr);
-
-#endif
