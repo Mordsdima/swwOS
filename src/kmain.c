@@ -11,12 +11,12 @@
 #include <liballoc.h>
 #include <fs/tar.h>
 #include <bootstub.h>
+#include <interrupts.h>
 
 extern uint64_t _exception_vector;
 extern void initialize_zerofs();
 
 void kfault() {
-    asm("wfe");
     for(;;);
 }
 
@@ -29,7 +29,7 @@ void kmain(bootstub_t* bs) {
 
     log_info("Initializating basic stuff... (such as exception vector)");
     
-    set_vbar_el1(&_exception_vector); // Init interrupts
+    int_init();//set_vbar_el1(&_exception_vector); // Init interrupts
     
     init_pmm(bs); // Init PMM
     vfs_init(); // Init VFS
@@ -53,7 +53,7 @@ void kmain(bootstub_t* bs) {
     print((char*)buf, size);
     //tprintf("%s\n", *buf);
 
-    log_info("uwu");
+    log_info("Thats end!");
 
     /*
     tprintf("Booted via %s (version: %s)\n", bootloader_info.response->name, bootloader_info.response->version);

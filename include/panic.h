@@ -5,11 +5,12 @@
 
 static inline void early_panic() {
     // 0xDEADBEEF
+    #ifdef __aarch64__
     asm volatile("ldr x0, =0xdeadbeef");
     asm("wfi");
     asm("wfe");
-    for(;;)
-        asm("nop");
+    #endif
+    for(;;);
 }
 
 static inline void panic(const char* restrict format, ...) {

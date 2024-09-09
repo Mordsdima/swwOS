@@ -3,5 +3,7 @@ flanterm/*.o
 *.o
 *.ko
 *.tar
-vfs/swk.elf
+vfs/swwk.elf
 ovmf.fd
+./.ninja_log
+./build.ninja

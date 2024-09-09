@@ -1,0 +1,6 @@
+cflags = -ffreestanding -Iinclude -Isrc/flanterm -std=gnu11 -Wall -Wextra -Werror -O3
+ldflags = -nostdlib -Tsrc/arch/aarch64/link.ld --no-warn-rwx-segments
+
+cc = aarch64-linux-gnu-gcc
+ld = aarch64-linux-gnu-ld
+as = aarch64-linux-gnu-as

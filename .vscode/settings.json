@@ -8,7 +8,16 @@
         "liminereqs.h": "c",
         "liballoc.h": "c",
         "typeinfo": "c",
-        "limine.h": "c"
+        "limine.h": "c",
+        "array": "c",
+        "charconv": "c",
+        "compare": "c",
+        "functional": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "variant": "c"
     },
     "C_Cpp.default.configurationProvider": "mesonbuild.mesonbuild",
     "mesonbuild.configureOnOpen": true

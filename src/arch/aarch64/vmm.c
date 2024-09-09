@@ -1,3 +1,5 @@
+#if defined (__aarch64__)
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -173,3 +175,5 @@ static pt_entry_t *get_next_level(pagemap_t pagemap, pt_entry_t *current_level,
 
     return ret;
 }
+
+#endif
