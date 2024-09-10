@@ -1,6 +1,9 @@
-[submodule "src/flanterm"]
-	path = src/flanterm
-	url = https://github.com/mintsuki/flanterm
 [submodule "external/uACPI"]
 	path = external/uACPI
 	url = https://github.com/SuperErnD/uACPI.git
+[submodule "externals/flanterm"]
+	path = externals/flanterm
+	url = https://github.com/mintsuki/flanterm
+[submodule "external/flanterm"]
+	path = external/flanterm
+	url = https://github.com/mintsuki/flanterm
