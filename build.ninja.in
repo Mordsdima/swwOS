@@ -1,5 +1,4 @@
 
-
 rule cc 
     command = $cc $cflags -c $in -o $out
 
@@ -23,14 +22,41 @@ build out/pmm.o: cc src/pmm.c
 build out/string.o: cc src/string.c
 build out/terminal.o: cc src/terminal.c
 build out/vfs.o: cc src/vfs.c
+build out/rt.o: cc src/rt.c
 build out/flanterm_fb.o: cc src/flanterm/backends/fb.c
 build out/flanterm.o: cc src/flanterm/flanterm.c
+build out/uacpi_abs.o: cc src/uacpi.c
+build out/default_handler_uacpi.o: cc src/uACPI/source/default_handlers.c
+build out/event_uacpi.o: cc src/uACPI/source/event.c
+build out/interpreter_uacpi.o: cc src/uACPI/source/interpreter.c
+build out/io_uacpi.o: cc src/uACPI/source/io.c
+build out/mutex_uacpi.o: cc src/uACPI/source/mutex.c
+build out/namespace_uacpi.o: cc src/uACPI/source/namespace.c
+build out/notify_uacpi.o: cc src/uACPI/source/notify.c
+build out/opcodes_uacpi.o: cc src/uACPI/source/opcodes.c
+build out/opregion_uacpi.o: cc src/uACPI/source/opregion.c
+build out/osi_uacpi.o: cc src/uACPI/source/osi.c
+build out/registers_uacpi.o: cc src/uACPI/source/registers.c
+build out/resources_uacpi.o: cc src/uACPI/source/resources.c
+build out/shareable_uacpi.o: cc src/uACPI/source/shareable.c
+build out/sleep_uacpi.o: cc src/uACPI/source/sleep.c
+build out/stdlib_uacpi.o: cc src/uACPI/source/stdlib.c
+build out/tables_uacpi.o: cc src/uACPI/source/tables.c
+build out/types_uacpi.o: cc src/uACPI/source/types.c
+build out/uacpi_uacpi.o: cc src/uACPI/source/uacpi.c
+build out/utilities_uacpi.o: cc src/uACPI/source/utilities.c
+
+# AArch64 (ARMv8-A) specific
 
 build out/vmm-aarch64.o: cc src/arch/aarch64/vmm.c
 build out/interrupts-aarch64.o: as src/arch/aarch64/interrupts.s
 
+# RISC-V (RV64I) specific
+
 build out/vmm-rv64.o: cc src/arch/rv64/vmm.c
 build out/interrupts-rv64.o: as src/arch/rv64/interrupts.s
+
+# AArch64 link
 
 build aarch64.elf: ld $
     out/limine.o out/tar.o out/zero.o $
@@ -38,7 +64,16 @@ build aarch64.elf: ld $
     out/locker.o out/log.o out/pmm.o $
     out/string.o out/terminal.o out/vfs.o $
     out/vmm-aarch64.o out/interrupts-aarch64.o out/flanterm_fb.o $
-    out/flanterm.o
+    out/flanterm.o out/uacpi_abs.o out/default_handler_uacpi.o $
+    out/interpreter_uacpi.o out/io_uacpi.o out/namespace_uacpi.o $
+    out/notify_uacpi.o out/opcodes_uacpi.o out/opregion_uacpi.o $
+    out/registers_uacpi.o out/shareable_uacpi.o out/sleep_uacpi.o $
+    out/stdlib_uacpi.o out/tables_uacpi.o out/types_uacpi.o $
+    out/uacpi_uacpi.o out/utilities_uacpi.o out/rt.o $
+    out/event_uacpi.o out/mutex_uacpi.o out/osi_uacpi.o $
+    out/resources_uacpi.o
+ 
+# RISC-V link
 
 build rv64.elf: ld $
     out/limine.o out/tar.o out/zero.o $
@@ -46,4 +81,11 @@ build rv64.elf: ld $
     out/locker.o out/log.o out/pmm.o $
     out/string.o out/terminal.o out/vfs.o $
     out/vmm-rv64.o out/interrupts-rv64.o out/flanterm_fb.o $
-    out/flanterm.o
+    out/flanterm.o out/uacpi_abs.o out/default_handler_uacpi.o $
+    out/interpreter_uacpi.o out/io_uacpi.o out/namespace_uacpi.o $
+    out/notify_uacpi.o out/opcodes_uacpi.o out/opregion_uacpi.o $
+    out/registers_uacpi.o out/shareable_uacpi.o out/sleep_uacpi.o $
+    out/stdlib_uacpi.o out/tables_uacpi.o out/types_uacpi.o $
+    out/uacpi_uacpi.o out/utilities_uacpi.o out/rt.o $
+    out/event_uacpi.o out/mutex_uacpi.o out/osi_uacpi.o $
+    out/resources_uacpi.o

@@ -15,7 +15,13 @@ fb_info_t limine_get_fb(uint8_t fb_num) {
         .width = lfb->width,
         .height = lfb->height,
         .pitch = lfb->pitch,
-        .bpp = lfb->bpp
+        .bpp = lfb->bpp,
+        .red_mask_size = lfb->red_mask_size,
+        .red_mask_shift = lfb->red_mask_shift,
+        .green_mask_size = lfb->green_mask_size,
+        .green_mask_shift = lfb->green_mask_shift,
+        .blue_mask_size = lfb->blue_mask_size,
+        .blue_mask_shift = lfb->blue_mask_shift
     };
 
     return fb;
@@ -53,7 +59,18 @@ module_t limine_get_module() {
 }
 
 char* limine_get_cmdline() {
-    return kernel_file.response->kernel_file->cmdline;
+    return kernel_file_req.response->kernel_file->cmdline;
+}
+
+void* limine_get_dtb() {
+    if(dtb_req.response == NULL) {
+        return NULL;
+    }
+    return dtb_req.response->dtb_ptr;
+}
+
+void* limine_get_rsdp() {
+    return _rsdp.response->address;
 }
 
 void limine_start() {
@@ -66,7 +83,9 @@ void limine_start() {
         .get_mmap = limine_get_mmap,
         .get_hhdm_off = limine_get_hhdm,
         .get_module = limine_get_module,
-        .get_cmdline = limine_get_cmdline
+        .get_cmdline = limine_get_cmdline,
+        .get_dtb = limine_get_dtb,
+        .get_rsdp = limine_get_rsdp
     };
 
     kmain(&bs); // Lets call kernel!

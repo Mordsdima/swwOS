@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/src/flanterm"
+                "${workspaceFolder}/src/flanterm",
+                "${workspaceFolder}/external/uACPI/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

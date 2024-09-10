@@ -1,5 +1,5 @@
-cflags = -ffreestanding -Iinclude -Isrc/flanterm -mcmodel=medany -std=gnu11 -Wall -Wextra -Werror -O3
-ldflags = -nostdlib -Tsrc/arch/rv64/link.ld --no-warn-rwx-segments
+cflags = -fPIC -ffreestanding -Iinclude -Isrc/flanterm -Isrc/uACPI/include -DUACPI_FORMATTED_LOGGING -mcmodel=medany -std=gnu11 -Wall -Wextra -O3
+ldflags = -shared -nostdlib -Tsrc/arch/rv64/link.ld --no-warn-rwx-segments
 
 cc = riscv64-linux-gnu-gcc
 ld = riscv64-linux-gnu-ld

@@ -32,11 +32,16 @@ static volatile struct limine_bootloader_info_request bootloader_info = {
 };
 
 __attribute__((used, section(".requests")))
-static volatile struct limine_kernel_file_request kernel_file = {
+static volatile struct limine_kernel_file_request kernel_file_req = {
     .id = LIMINE_KERNEL_FILE_REQUEST,
     .revision = 0, .response = NULL
 };
 
+__attribute__((used, section(".requests")))
+static volatile struct limine_dtb_request dtb_req = {
+    .id = LIMINE_DTB_REQUEST,
+    .revision = 0, .response = NULL
+};
 
 __attribute__((used, section(".requests")))
 static volatile struct limine_module_request _modules = {

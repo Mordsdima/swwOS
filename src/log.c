@@ -2,7 +2,7 @@
 #include <terminal.h>
 #include <stdarg.h>
 
-void log_info(char* string, ...) {
+void log_info(const char* string, ...) {
     // ДРЕВНЕЕ ВОСТАНИЕ РАБОВ В ДРЕВНЕМ РИМЕ
     va_list args; // Broken needs to fix
     va_start(args, string);
@@ -10,7 +10,7 @@ void log_info(char* string, ...) {
     va_end(args);
 }
 
-void log_warn(char* string, ...) {
+void log_warn(const char* string, ...) {
     // ДРЕВНЕЕ ВОСТАНИЕ РАБОВ В ДРЕВНЕМ РИМЕ
     va_list args; // Broken needs to fix
     va_start(args, string);
@@ -18,7 +18,7 @@ void log_warn(char* string, ...) {
     va_end(args);
 }
 
-void log_erro(char* string, ...) {
+void log_erro(const char* string, ...) {
     // ДРЕВНЕЕ ВОСТАНИЕ РАБОВ В ДРЕВНЕМ РИМЕ
     va_list args; // Broken needs to fix
     va_start(args, string);

@@ -23,7 +23,13 @@ typedef struct {
     uint64_t width;
     uint64_t height;
     uint64_t pitch;
-    uint16_t bpp; // Bits per pixel
+    uint16_t bpp;
+    uint8_t red_mask_size;
+    uint8_t red_mask_shift;
+    uint8_t green_mask_size;
+    uint8_t green_mask_shift;
+    uint8_t blue_mask_size;
+    uint8_t blue_mask_shift;
 } fb_info_t;
 
 typedef struct {
@@ -32,5 +38,7 @@ typedef struct {
     mmap_entries_t (*get_mmap)    (void);
     module_t       (*get_module)  (void);
     char*          (*get_cmdline) (void);
+    void*          (*get_dtb)     (void);
+    void*          (*get_rsdp)    (void);
 } bootstub_t;
 
