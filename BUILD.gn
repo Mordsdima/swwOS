@@ -1,5 +1,5 @@
 executable("kernel-rv64") {
-  sources = [ "src/arch/rv64/bootstrap.c", "src/fb.c", "src/main.c" ]
+  sources = [ "src/arch/rv64/bootstrap.c", "src/arch/rv64/vmm.c", "src/fb.c", "src/main.c", "src/spinlock.c", "src/pmm.c", "src/memory.c", "src/fdt/fdt.c", "src/arch/rv64/plic.c", "src/liballoc.c", "src/fdt/fdt_ro.c", "src/fdt/fdt_strerror.c" ]
   ldflags = [ "--target=riscv64-none-elf", "-nostdlib", "-ffreestanding", "-T../src/arch/rv64/link.ld" ]
   cflags = [ "--target=riscv64-none-elf", "-ffreestanding", "-std=gnu11", "-I../incl", "-mcmodel=medany" ]
 }

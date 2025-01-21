@@ -5,6 +5,14 @@
 
 extern void kmain();
 
+__attribute__((used, section(".limine_requests")))
+LIMINE_BASE_REVISION(3);
+
+__attribute__((used, section(".limine_requests"))) static volatile struct limine_framebuffer_request framebuffer_request = {
+  .id = LIMINE_FRAMEBUFFER_REQUEST,
+  .revision = 0
+};
+
 void kbootstrap()
 {
   if (LIMINE_BASE_REVISION_SUPPORTED == false)

@@ -2,6 +2,7 @@
 #include <limine.h>
 #include <stddef.h>
 #define SSFN_CONSOLEBITMAP_TRUECOLOR
+#define SSFN_CONSOLEBITMAP_CONTROL
 #include <ssfn.h>
 
 void fb_setup(struct limine_framebuffer* framebuffer)
@@ -15,11 +16,16 @@ void fb_setup(struct limine_framebuffer* framebuffer)
   ssfn_dst.bg = 0;
 }
 
-void raw_print(char* str)
+void raw_print(const char* str)
 {
   int n = 0;
   while (str[n]) {
     ssfn_putc(str[n]);
     n++;
   }
+}
+
+void raw_putc(const char c)
+{
+  ssfn_putc(c);
 }
